@@ -1,0 +1,37 @@
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+9999 TOTAL BANCO                                                                                                                                
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-30                                                                                                                     
+FECHA PROCESO  : 2021-07-26                                                                                                                     
+                                                                                                                                                
+          CUENTA      CORRECCION      DESCRIPCION                                 SALDO AL DEBE           SALDO AL HABER                        
+     --------------   ---------     --------------------------------         ------------------       ------------------                        
+                                                                                                                                                
+    160510095201                    2- RESD VGTE GTIA HIPT -UG0                         129,439.86                        0.00                  
+    410210095211                    2- RESD VGTE GTIA HIPT -UG0                               0.00                  129,439.86                  
+    630533001                       2- CREDITOS DE VIVIENDA ESTIPULA                          0.00                  161,799.80                  
+    643020095210                    2- RESD VGTE -UG0                                   161,799.80                        0.00                  
+                                                            TOTAL                       291,239.66                  291,239.66                  
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0018   EL POLO                                                                                                                                  
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-30                                                                                                                     
+FECHA PROCESO  : 2021-07-26                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0000     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+50886 643020095210    0018 0018                161,799.80                      0.00   BCS 000000300721 0ICCVUC4C0320F82F0000000030013 UG0       
+50887 630533001       0018 0018                      0.00                161,799.80   BCS 000000300721 0ICCVUC4C0320F82F0000000030013 UG0       
+50888 410210095211    0018 0018                      0.00                129,439.86   BCS 000000300721 0INFIUC4C0320F82F0000000040013 UG0       
+50889 160510095201    0018 0018                129,439.86                      0.00   BCS 000000300721 0INTEUC4C0320F82F0000000050013 UG0       
+                      TOTAL                    291,239.66                291,239.66                                                             

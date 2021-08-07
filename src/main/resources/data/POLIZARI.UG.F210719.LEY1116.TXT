@@ -1,0 +1,63 @@
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+9999 TOTAL BANCO                                                                                                                                
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-19                                                                                                                     
+FECHA PROCESO  : 2021-07-22                                                                                                                     
+                                                                                                                                                
+          CUENTA      CORRECCION      DESCRIPCION                                 SALDO AL DEBE           SALDO AL HABER                        
+     --------------   ---------     --------------------------------         ------------------       ------------------                        
+                                                                                                                                                
+    140405095201                    2- RESD VGTE GTIA HIPT -UG0                      95,883,353.63               95,883,353.63                  
+                                                            TOTAL                    95,883,353.63               95,883,353.63                  
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+9999 TOTAL BANCO                                                                                                                                
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-21                                                                                                                     
+FECHA PROCESO  : 2021-07-22                                                                                                                     
+                                                                                                                                                
+          CUENTA      CORRECCION      DESCRIPCION                                 SALDO AL DEBE           SALDO AL HABER                        
+     --------------   ---------     --------------------------------         ------------------       ------------------                        
+                                                                                                                                                
+    140405095201            C       2- RESD VGTE GTIA HIPT -UG0                      95,883,353.63               95,883,353.63                  
+                                                            TOTAL                    95,883,353.63               95,883,353.63                  
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0018   EL POLO                                                                                                                                  
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-19                                                                                                                     
+FECHA PROCESO  : 2021-07-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0008     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00001 140405095201    0018 0018             95,883,353.63                      0.00   BCD 000000190721 0CAPIUB9CCLA0788C96E5000050013 UG0       
+00002 140405095201    0018 0018                      0.00             95,883,353.63   BCD 000000190721 0CAPIUB9CCLA0788C96E5000050013 UG0       
+                      TOTAL                 95,883,353.63             95,883,353.63                                                             
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   2                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0018   EL POLO                                                                                                                                  
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2021-07-21                                                                                                                     
+FECHA PROCESO  : 2021-07-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0012     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00001 140405095201    0018 0018            -95,883,353.63                      0.00 C BCF 000000210721 0CAPIUB9CCLA0788C96E5000010013 UG0       
+00002 140405095201    0018 0018                      0.00            -95,883,353.63 C BCF 000000210721 0CAPIUB9CCLA0788C96E5000010013 UG0       
+                      TOTAL                -95,883,353.63            -95,883,353.63                                                             

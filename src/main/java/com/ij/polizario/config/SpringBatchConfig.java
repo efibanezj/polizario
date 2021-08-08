@@ -2,14 +2,12 @@ package com.ij.polizario.config;
 
 import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
-import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
@@ -23,17 +21,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 @Configuration
-@AllArgsConstructor
 @EnableBatchProcessing
 public class SpringBatchConfig {
 
     private static final String POLIZARIO_JOB_NAME = "polizarioJob";
+    private static final String FILES_TYPE1_DELIMITER = "/";
 
     private final StepBuilderFactory stepBuilderFactory;
     private final FileType1Repository fileType1Repository;
 
-    @Value("${input.files.path}")
-    private Resource[] inputFiles;
+    @Value("${fileType1.files.path}")
+    private Resource[] fileType1FilesPath;
+
+    @Value("${fileType1.fields}")
+    private String[] fileType1Fields;
+
+    @Value("${fileType1.fields.includeFields}")
+    private int[] fileType1IncludeFields;
+
+    public SpringBatchConfig(StepBuilderFactory stepBuilderFactory, FileType1Repository fileType1Repository) {
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.fileType1Repository = fileType1Repository;
+    }
 
 
     @Bean("polizarioJob")
@@ -50,7 +59,6 @@ public class SpringBatchConfig {
         return stepBuilderFactory.get("accountingInterfaceStep")
                 .<FileType1Entity, FileType1Entity>chunk(10)
                 .reader(multiAccountingInterfaceReader())
-                .processor(processor())
                 .writer(itemWriter())
                 .build();
     }
@@ -59,13 +67,13 @@ public class SpringBatchConfig {
     public MultiResourceItemReader<FileType1Entity> multiAccountingInterfaceReader() {
         MultiResourceItemReader<FileType1Entity> reader = new MultiResourceItemReader<>();
         reader.setDelegate(accountingInterfaceReader());
-        reader.setResources(inputFiles);
+        reader.setResources(fileType1FilesPath);
         return reader;
     }
 
     @Bean
     public FlatFileItemReader<FileType1Entity> accountingInterfaceReader() {
-        FlatFileItemReader<FileType1Entity> itemReader = new FlatFileItemReader<FileType1Entity>();
+        FlatFileItemReader<FileType1Entity> itemReader = new FlatFileItemReader<>();
         itemReader.setLineMapper(lineMapper());
         return itemReader;
     }
@@ -73,20 +81,16 @@ public class SpringBatchConfig {
     @Bean
     public LineMapper<FileType1Entity> lineMapper() {
 
-        DefaultLineMapper<FileType1Entity> lineMapper = new DefaultLineMapper<FileType1Entity>();
+        DefaultLineMapper<FileType1Entity> lineMapper = new DefaultLineMapper<>();
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-        lineTokenizer.setNames("id", "accountingType", "debitValue", "creditValue");
-        lineTokenizer.setDelimiter("/");
+        lineTokenizer.setNames(fileType1Fields);
+        lineTokenizer.setDelimiter(FILES_TYPE1_DELIMITER);
+        lineTokenizer.setIncludedFields(fileType1IncludeFields);
         BeanWrapperFieldSetMapper<FileType1Entity> fieldSetMapper = new BeanWrapperFieldSetMapper<FileType1Entity>();
         fieldSetMapper.setTargetType(FileType1Entity.class);
         lineMapper.setLineTokenizer(lineTokenizer);
         lineMapper.setFieldSetMapper(fieldSetMapper);
         return lineMapper;
-    }
-
-    @Bean
-    public ItemProcessor<FileType1Entity, FileType1Entity> processor() {
-        return new DBLogProcessor();
     }
 
     @Bean

@@ -86,7 +86,7 @@ public class SpringBatchConfig {
         lineTokenizer.setNames(fileType1Fields);
         lineTokenizer.setDelimiter(FILES_TYPE1_DELIMITER);
         lineTokenizer.setIncludedFields(fileType1IncludeFields);
-        BeanWrapperFieldSetMapper<FileType1Entity> fieldSetMapper = new BeanWrapperFieldSetMapper<FileType1Entity>();
+        BeanWrapperFieldSetMapper<FileType1Entity> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(FileType1Entity.class);
         lineMapper.setLineTokenizer(lineTokenizer);
         lineMapper.setFieldSetMapper(fieldSetMapper);

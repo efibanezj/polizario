@@ -39,7 +39,7 @@ CREATE TABLE file_type1
     column_AJ       VARCHAR(100),
     column_AK       VARCHAR(100),
     column_AL       VARCHAR(100),
-    contract_number       VARCHAR(100),
+    contract_number VARCHAR(100),
     column_AN       VARCHAR(100),
     column_AO       VARCHAR(100),
     column_AP       VARCHAR(100),
@@ -50,5 +50,16 @@ CREATE TABLE file_type1
     column_AU       VARCHAR(100),
     column_AV       VARCHAR(100),
     column_AW       VARCHAR(100),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE file_type2
+(
+    id             INT(100) NOT NULL AUTO_INCREMENT,
+    accounting_date VARCHAR(500),
+    account        VARCHAR(500),
+    cargo          VARCHAR(500),
+    abono          VARCHAR(500),
+    description    VARCHAR(500),
     PRIMARY KEY (id)
 );

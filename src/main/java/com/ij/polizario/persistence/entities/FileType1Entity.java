@@ -27,14 +27,14 @@ public class FileType1Entity {
     private String column_H;
     private String column_I;
     private String column_J;
-    private String accounting_type;
+    private String accountingType;
     private String column_L;
     private String column_M;
     private String column_N;
     private String column_O;
     private String column_P;
-    private String debit_value;
-    private String credit_value;
+    private String debitValue;
+    private String creditValue;
     private String column_S;
     private String column_T;
     private String column_U;
@@ -55,7 +55,8 @@ public class FileType1Entity {
     private String column_AJ;
     private String column_AK;
     private String column_AL;
-    private String column_AM;
+//    private String column_AM;
+    private String contractNumber;
     private String column_AN;
     private String column_AO;
     private String column_AP;

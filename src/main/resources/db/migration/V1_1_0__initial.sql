@@ -39,7 +39,7 @@ CREATE TABLE file_type1
     column_AJ       VARCHAR(100),
     column_AK       VARCHAR(100),
     column_AL       VARCHAR(100),
-    column_AM       VARCHAR(100),
+    contract_number       VARCHAR(100),
     column_AN       VARCHAR(100),
     column_AO       VARCHAR(100),
     column_AP       VARCHAR(100),

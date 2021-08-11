@@ -1,6 +1,15 @@
-GET http://localhost:8080/files/accounting-interface?excludeType=ICCV
-
-
+GET http://localhost:8080/files/accounting-interface?accountingTypes=ICCV
 
 ###
 
+GET http://localhost:8080/files/accounting-interface?accountingTypes=CAPI,CCPS,INFI,INTE
+
+###
+
+GET http://localhost:8080/files/accounting-interface?contractsNumbers=9600250563
+
+###
+
+GET http://localhost:8080/files/accounting-interface?accountingTypes=CAPI,CCPS,INFI,INTE&contractsNumbers=9600250563
+
+###

@@ -1,10 +1,16 @@
 package com.ij.polizario.core.service.impl;
 
+import com.ij.polizario.Util.Util;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
+import com.ij.polizario.exception.BusinessException;
+import com.ij.polizario.exception.BusinessExceptionEnum;
 import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
+import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.ports.input.controller.response.AccountingInterfaceResponse;
+import com.ij.polizario.ports.input.controller.response.ContractResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -13,10 +19,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.*;
 
 @Slf4j
@@ -35,60 +37,97 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
     }
 
     @Override
-    public AccountingInterfaceResponse launchAccountingInterfaceJobLoader(String excludeType) throws JobParametersInvalidException,
-            JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public AccountingInterfaceResponse generateAccountingInterface(AccountingInterfaceRequest request) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
+
+        BatchStatus batchStatus = lunchFileLoaderJob();
+        if (batchStatus == BatchStatus.COMPLETED) {
+
+            List<FileType1Entity> interfaceData = getInterfaceData(request);
+
+            Double debit = interfaceData
+                    .stream()
+                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
+                    .sum();
+
+            Double credit = interfaceData
+                    .stream()
+                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
+                    .sum();
+
+            Double total = debit - credit;
+
+            LinkedHashSet<String> accountingTypesValues = getAccountingList(interfaceData);
+
+            List<ContractResponse> contractList = getContractList(interfaceData);
+
+            return AccountingInterfaceResponse.builder()
+                    .accountingTypes(accountingTypesValues)
+                    .totalCreditValue(Util.doubleToString(credit))
+                    .totalDebitValue(Util.doubleToString(debit))
+                    .totalOperationValue(Util.doubleToString(total))
+                    .contractList(contractList)
+                    .build();
+
+        } else {
+            throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
+        }
+    }
+
+    private LinkedHashSet<String> getAccountingList(List<FileType1Entity> interfaceData) {
+        LinkedHashSet<String> accountingTypesValues = new LinkedHashSet<>();
+        interfaceData.forEach(data -> accountingTypesValues.add(data.getAccountingType()));
+        return accountingTypesValues;
+    }
+
+    private List<ContractResponse> getContractList(List<FileType1Entity> interfaceData) {
+
+        Map<String, ContractResponse> contractNumberMap = new LinkedHashMap<>();
+        interfaceData.forEach(data -> {
+            ContractResponse contract = contractNumberMap.get(data.getContractNumber());
+            if (contract == null) {
+                contract = ContractResponse.builder()
+                        .contractNumber(data.getContractNumber())
+                        .credit("0")
+                        .debit("0")
+                        .total("0").
+                        build();
+            }
+            Double debitCon = Util.mapDoubleNumber(contract.getDebit()) + Util.mapDoubleNumber(data.getDebitValue());
+            Double creditCon = Util.mapDoubleNumber(contract.getCredit()) + Util.mapDoubleNumber(data.getCreditValue());
+
+            contract.setDebit(Util.doubleToString(debitCon));
+            contract.setCredit(Util.doubleToString(creditCon));
+            contractNumberMap.put(contract.getContractNumber(), contract);
+        });
+        List<ContractResponse> contractList = new ArrayList<>(contractNumberMap.values());
+        contractList.forEach(totalCon -> totalCon.setTotal(Util.doubleToString(Util.mapDoubleNumber(totalCon.getDebit()) - Util.mapDoubleNumber(totalCon.getCredit()))));
+
+        return contractList;
+    }
+
+    private List<FileType1Entity> getInterfaceData(AccountingInterfaceRequest request) {
+
+        if (CollectionUtils.isEmpty(request.getAccountingTypesList()) && CollectionUtils.isEmpty(request.getContractsNumberList())) {
+            return fileType1Repository.findAll();
+        } else if (CollectionUtils.isEmpty(request.getAccountingTypesList()) && CollectionUtils.isNotEmpty(request.getContractsNumberList())) {
+            return fileType1Repository.findAllByContractNumberIn(request.getContractsNumberList());
+        } else if (CollectionUtils.isNotEmpty(request.getAccountingTypesList()) && CollectionUtils.isEmpty(request.getContractsNumberList())) {
+            return fileType1Repository.findAllByAccountingTypeIn(request.getAccountingTypesList());
+        } else if (CollectionUtils.isNotEmpty(request.getAccountingTypesList()) && CollectionUtils.isNotEmpty(request.getContractsNumberList())) {
+            return fileType1Repository.findAllByAccountingTypeInAndContractNumberIn(request.getAccountingTypesList(), request.getContractsNumberList());
+        }
+        throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
+    }
+
+    private BatchStatus lunchFileLoaderJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         fileType1Repository.deleteAll();
-
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("date", UUID.randomUUID().toString())
                 .addLong("JobId", System.currentTimeMillis())
                 .addLong("time", System.currentTimeMillis()).toJobParameters();
         JobExecution execution = jobLauncher.run(polizarioJob, jobParameters);
-        log.info("Execution {} ",execution.getStatus());
-
-        Iterable<FileType1Entity> fileType1List = fileType1Repository.findAll();
-
-        List<FileType1Entity> nuevaLista = new ArrayList<>();
-        fileType1List.forEach(nuevaLista::add);
-
-        Double debit = nuevaLista.stream()
-                .filter(fileType1Entity -> !fileType1Entity.getAccounting_type().equalsIgnoreCase(excludeType))
-                .mapToDouble(x -> Double.parseDouble(x.getDebit_value().replace("-", "").replace(",", "")))
-                .sum();
-
-        Double credit = nuevaLista.stream()
-                .filter(fileType1Entity -> !fileType1Entity.getAccounting_type().equalsIgnoreCase(excludeType))
-                .mapToDouble(x -> Double.parseDouble(x.getCredit_value().replace("-", "").replace(",", "")))
-                .sum();
-
-        Double total = debit - credit;
-
-        LinkedHashSet<String> accountingTypesList = new LinkedHashSet<>();
-        fileType1List.forEach(fileType1Entity -> {
-
-            if (!fileType1Entity.getAccounting_type().equalsIgnoreCase(excludeType)) {
-                accountingTypesList.add(fileType1Entity.getAccounting_type());
-            }
-        });
-
-        String accountingTypes = accountingTypesList.toString();
-
-        return AccountingInterfaceResponse.builder()
-                .accountingTypes(accountingTypes)
-                .totalCreditValue(doubleToString(credit))
-                .totalDebitValue(doubleToString(debit))
-                .totalOperationValue(doubleToString(total)).
-                build();
-    }
-
-    private String doubleToString(Double value) {
-        BigDecimal bd = new BigDecimal(value);
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(',');
-        formatter.setDecimalFormatSymbols(symbols);
-        return formatter.format(bd.doubleValue());
+        log.info("Execution {} ", execution.getStatus());
+        return execution.getStatus();
     }
 }

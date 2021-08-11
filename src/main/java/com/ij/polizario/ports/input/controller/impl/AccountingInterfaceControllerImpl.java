@@ -3,6 +3,7 @@ package com.ij.polizario.ports.input.controller.impl;
 
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.ports.input.controller.IAccountingInterfaceController;
+import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.ports.input.controller.response.AccountingInterfaceResponse;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
@@ -25,7 +29,11 @@ public class AccountingInterfaceControllerImpl implements IAccountingInterfaceCo
     }
 
     @GetMapping("/accounting-interface")
-    public AccountingInterfaceResponse accountingInterface(@RequestParam(required = false) String excludeType) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        return iAccountingInterfaceService.launchAccountingInterfaceJobLoader(excludeType);
+    public AccountingInterfaceResponse accountingInterface(@RequestParam(required = false) String accountingTypes,
+                                                           @RequestParam(required = false) String contractsNumbers)
+            throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+
+        AccountingInterfaceRequest interfaceRequest = new AccountingInterfaceRequest(accountingTypes,contractsNumbers);
+        return iAccountingInterfaceService.generateAccountingInterface(interfaceRequest);
     }
 }

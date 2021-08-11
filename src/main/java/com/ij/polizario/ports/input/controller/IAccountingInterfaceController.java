@@ -8,5 +8,5 @@ import org.springframework.batch.core.repository.JobRestartException;
 
 public interface IAccountingInterfaceController {
 
-    AccountingInterfaceResponse accountingInterface(String excludeType) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException;
+    AccountingInterfaceResponse accountingInterface(String excludeType, String contractsNumbers) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException;
 }

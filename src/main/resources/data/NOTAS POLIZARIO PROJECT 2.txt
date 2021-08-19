@@ -1,0 +1,26 @@
+
+
+000000110521 0ORDOV117UFCD0045611 000020013
+
+
+x,tipocontrable,x,transaccion,
+0,ORDO,V117,UFCD,0045611,000020013
+
+
+
+comprar valores de los dso tipos de archivos, por tipo contable
+cargos = credito
+abono = debito
+
+tipo 1 columnpp si viene una c el valor se multiplica por -1. puede ser el debnito o el credito
+
+
+
+TIPO 2 TOTALES POR CUENTA
+
+
+
+TIPO 2 C.C OPERACION CONTABLE, SEGREGAR POR ESO Y POR CUENTA
+
+
+AGRGAR ALGO PARA IDENTIFICAR UNAS CUENTAS PROBLEMAS PARAMETRIZABLES

@@ -1,8 +1,8 @@
-GET http://localhost:8080/files/accounting-interface?accountingTypes=ICCV
+GET http://localhost:8080/files/accounting-interface
 
 ###
 
-GET http://localhost:8080/files/accounting-interface?accountingTypes=CAPI,CCPS,INFI,INTE
+GET http://localhost:8080/files/accounting-interface?accountingTypes=NOPR,INTE,GAST
 
 ###
 

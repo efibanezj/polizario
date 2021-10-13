@@ -32,8 +32,8 @@ public class FileType1Entity {
     private String column_M;
     private String column_N;
     private String column_O;
-    private String column_P;
-    private String debitValue;
+    private String operationSign; //TODO validate name of this field
+    private String debitValue; //TODO wht means "-" sign right t to the debit or credit value?
     private String creditValue;
     private String column_S;
     private String column_T;
@@ -55,7 +55,6 @@ public class FileType1Entity {
     private String column_AJ;
     private String column_AK;
     private String column_AL;
-//    private String column_AM;
     private String contractNumber;
     private String column_AN;
     private String column_AO;

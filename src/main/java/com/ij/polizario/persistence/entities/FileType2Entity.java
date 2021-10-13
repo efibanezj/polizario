@@ -20,6 +20,7 @@ public class FileType2Entity {
     private String account;
     private String cargo;
     private String abono;
+    private String accountingType;
     private String description;
 
     public FileType2Entity(String fecha, String strLine) {
@@ -28,6 +29,7 @@ public class FileType2Entity {
         this.account = strLine.substring(6,18).trim();
         this.cargo = strLine.substring(36,57).trim();
         this.abono = strLine.substring(58,83).trim();
+        this.accountingType = strLine.substring(104,108).trim();
         this.description = strLine.substring(103,133).trim();
     }
 }

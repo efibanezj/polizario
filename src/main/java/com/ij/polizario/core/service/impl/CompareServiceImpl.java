@@ -107,6 +107,57 @@ public class CompareServiceImpl implements ICompareService {
             compare.add(fileCompareDetailResponse);
 
         }
+
+
+        //ALL
+        Double debito = fileType1EntityList
+                .stream()
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
+                .sum();
+
+        Double abono = fileType2EntityList
+                .stream()
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
+                .sum();
+
+        Double diferenceDebito = Math.abs(debito - abono);
+
+        CompareDebitoResponse compareDebitoResponse = CompareDebitoResponse.builder()
+                .debito(Util.doubleToString(debito))
+                .abono(Util.doubleToString(abono))
+                .diferencia(Util.doubleToString(diferenceDebito))
+                .build();
+
+
+        Double credito = fileType1EntityList
+                .stream()
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
+                .sum();
+
+        Double cargo = fileType2EntityList
+                .stream()
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
+                .sum();
+
+        Double diferenceCredito = Math.abs(credito - cargo);
+
+        CompareCreditoResponse compareCreditoResponse = CompareCreditoResponse.builder()
+                .credito(Util.doubleToString(credito))
+                .cargo(Util.doubleToString(cargo))
+                .diferencia(Util.doubleToString(diferenceCredito))
+                .build();
+
+
+        FileCompareDetailResponse fileCompareDetailResponse = FileCompareDetailResponse.builder()
+                .credito(compareCreditoResponse)
+                .debito(compareDebitoResponse)
+                .tipo("Todos")
+                .build();
+
+        compare.add(fileCompareDetailResponse);
+
+
+
         return FileCompareResponse.builder().compare(compare).build();
     }
 }

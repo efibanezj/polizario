@@ -16,6 +16,7 @@ public class PolizarioResponse {
 
     private String totalCargoValue;
     private String totalAbonoValue;
-    private String totalOperationValue;
+    private String diferencia;
     private LinkedHashSet<String> accountingTypes;
+    private List<ContractPolizarioResponse> contractList;
 }

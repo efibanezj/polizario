@@ -1,29 +1,16 @@
 package com.ij.polizario.core.service.impl;
 
 import com.ij.polizario.Util.Util;
-import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.IPolizarioService;
-import com.ij.polizario.exception.BusinessException;
-import com.ij.polizario.exception.BusinessExceptionEnum;
-import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.entities.FileType2Entity;
-import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
-import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
-import com.ij.polizario.ports.input.controller.response.AccountingInterfaceResponse;
-import com.ij.polizario.ports.input.controller.response.ContractResponse;
+import com.ij.polizario.ports.input.controller.response.ContractPolizarioResponse;
 import com.ij.polizario.ports.input.controller.response.PolizarioResponse;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.springframework.batch.core.*;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -39,7 +26,7 @@ public class PolizarioServiceImpl implements IPolizarioService {
 
     private final FileType2Repository fileType2Repository;
 
-    public PolizarioServiceImpl(FileType2Repository fileType2Repository,@Value("${fileType2.files.path}")String fileType2FilesPath) {
+    public PolizarioServiceImpl(FileType2Repository fileType2Repository, @Value("${fileType2.files.path}") String fileType2FilesPath) {
         this.fileType2Repository = fileType2Repository;
         this.fileType2FilesPath = fileType2FilesPath;
     }
@@ -59,22 +46,51 @@ public class PolizarioServiceImpl implements IPolizarioService {
                 .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
                 .sum();
 
-        Double total = cargo - abono;
+        Double diferencia = Math.abs(cargo - abono);
 
         LinkedHashSet<String> accountingTypesValues = getAccountingTypeList(data);
+
+        List<ContractPolizarioResponse> contractList = getContractList(data);
 
         return PolizarioResponse.builder()
                 .accountingTypes(accountingTypesValues)
                 .totalCargoValue(Util.doubleToString(cargo))
                 .totalAbonoValue(Util.doubleToString(abono))
-                .totalOperationValue(Util.doubleToString(total))
+                .diferencia(Util.doubleToString(diferencia))
+                .contractList(contractList)
                 .build();
 
     }
 
+    private List<ContractPolizarioResponse> getContractList(List<FileType2Entity> interfaceData) {
+
+        Map<String, ContractPolizarioResponse> contractNumberMap = new LinkedHashMap<>();
+        interfaceData.forEach(data -> {
+            ContractPolizarioResponse contract = contractNumberMap.get(data.getAccount());
+            if (contract == null) {
+                contract = ContractPolizarioResponse.builder()
+                        .contrato(data.getAccount())
+                        .cargo("0")
+                        .abono("0")
+                        .total("0").
+                        build();
+            }
+            Double abonoCon = Util.mapDoubleNumber(contract.getAbono()) + Util.mapDoubleNumber(data.getAbono());
+            Double cargoCon = Util.mapDoubleNumber(contract.getCargo()) + Util.mapDoubleNumber(data.getCargo());
+
+            contract.setAbono(Util.doubleToString(abonoCon));
+            contract.setCargo(Util.doubleToString(cargoCon));
+            contractNumberMap.put(contract.getContrato(), contract);
+        });
+        List<ContractPolizarioResponse> contractList = new ArrayList<>(contractNumberMap.values());
+        contractList.forEach(totalCon -> totalCon.setTotal(Util.doubleToString(Util.mapDoubleNumber(totalCon.getAbono()) - Util.mapDoubleNumber(totalCon.getCargo()))));
+
+        return contractList;
+    }
+
     private LinkedHashSet<String> getAccountingTypeList(List<FileType2Entity> dataList) {
         LinkedHashSet<String> accountingTypesValues = new LinkedHashSet<>();
-        dataList.forEach(data -> accountingTypesValues.add(data.getDescription().substring(1,5)));
+        dataList.forEach(data -> accountingTypesValues.add(data.getDescription().substring(1, 5)));
         return accountingTypesValues;
     }
 
@@ -88,12 +104,13 @@ public class PolizarioServiceImpl implements IPolizarioService {
 //        File dir = new File("C:/Develop/Projects/Polizario/polizarioFileLoader/src/main/resources/data/");
         FileFilter fileFilter = new WildcardFileFilter("POLIZARI*.*");
         File[] files = dir.listFiles(fileFilter);
-        for (int i = 0; i < files.length; i++) {
-            System.out.println(files[i]);
+        assert files != null;
+        for (File file : files) {
+            System.out.println(file);
 
 
             try {
-                FileInputStream fstream = new FileInputStream(files[i]);
+                FileInputStream fstream = new FileInputStream(file);
 //            FileInputStream fstream = new FileInputStream("C:\\Develop\\Projects\\Polizario\\polizarioFileLoader\\src\\main\\resources\\data\\POLIZARI.UG.F210719.LEY1116.TXT");
                 BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
@@ -133,7 +150,7 @@ public class PolizarioServiceImpl implements IPolizarioService {
             }
         }
 
-        if(CollectionUtils.isNotEmpty(fileType2EntityList)) {
+        if (CollectionUtils.isNotEmpty(fileType2EntityList)) {
             fileType2Repository.saveAll(fileType2EntityList);
         }
         return fileType2EntityList;

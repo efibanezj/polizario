@@ -47,12 +47,12 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
 
             Double debit = interfaceData
                     .stream()
-                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
+                    .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getDebitValue()),entity.getOperationSign()))
                     .sum();
 
             Double credit = interfaceData
                     .stream()
-                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
+                    .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getCreditValue()),entity.getOperationSign()))
                     .sum();
 
             Double total = debit - credit;
@@ -72,6 +72,14 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
         } else {
             throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
         }
+    }
+
+    private Double calculateValueBySign(Double value, String sign){
+
+        if(sign.equalsIgnoreCase("C")){
+            return value * -1;
+        }
+        return value;
     }
 
     private LinkedHashSet<String> getAccountingList(List<FileType1Entity> interfaceData) {

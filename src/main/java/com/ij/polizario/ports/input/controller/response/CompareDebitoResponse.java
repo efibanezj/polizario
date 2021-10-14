@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CompareDebitoResponse {
 
-    private String abono;
+    private String cargo;
     private String debito;
     private String diferencia;
 }

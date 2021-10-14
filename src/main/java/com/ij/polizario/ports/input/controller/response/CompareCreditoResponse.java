@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompareCreditoResponse {
-    private String cargo;
+    private String abono;
     private String credito;
     private String diferencia;
 }

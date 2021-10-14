@@ -16,7 +16,7 @@ public class AccountingInterfaceResponse {
 
     private String totalDebitValue;
     private String totalCreditValue;
-    private String totalOperationValue;
+    private String diferencia;
     private LinkedHashSet<String> accountingTypes;
     private List<ContractResponse> contractList;
 }

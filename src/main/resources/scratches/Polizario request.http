@@ -1,0 +1,17 @@
+
+
+
+### Tipo 1 Completo
+GET http://localhost:8080/files/accounting-interface?accountingTypes=CAPI,CCPS,INFI,INTE
+
+### Tipo 2 Completo
+GET http://localhost:8080/files/polizario
+
+
+### Comparación Completo
+GET http://localhost:8080/files/compareFiles?accountingTypes=CAPI,CCPS,INFI,INTE
+
+
+
+### agregar campo de resultado
+### pasar a excel

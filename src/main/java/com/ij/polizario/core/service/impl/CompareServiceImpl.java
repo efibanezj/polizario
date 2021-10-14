@@ -35,14 +35,11 @@ public class CompareServiceImpl implements ICompareService {
     public FileCompareResponse compare(String accountingTypes, String contractsNumbers) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
         AccountingInterfaceRequest interfaceRequest = new AccountingInterfaceRequest(accountingTypes, contractsNumbers);
-        AccountingInterfaceResponse accountingInterfaceResponse = iAccountingInterfaceService.generateAccountingInterface(interfaceRequest);
-        PolizarioResponse polizarioResponse = IPolizarioService.generatePolizario();
+        List<FileType1Entity> fileType1EntityList = iAccountingInterfaceService.generateData(interfaceRequest);
+        List<FileType2Entity>  fileType2EntityList = IPolizarioService.generateData();
 
 
         List<FileCompareDetailResponse> compare = new ArrayList<>();
-
-        List<FileType1Entity> fileType1EntityList = fileType1Repository.findAll();
-        List<FileType2Entity> fileType2EntityList = fileType2Repository.findAll();
 
         Set<String> tiposContables = new LinkedHashSet<>();
         fileType1EntityList.forEach(fileType1Entity -> tiposContables.add(fileType1Entity.getAccountingType()));
@@ -65,16 +62,16 @@ public class CompareServiceImpl implements ICompareService {
                     .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
                     .sum();
 
-            Double abono = rowsFile2ByType
+            Double cargo = rowsFile2ByType
                     .stream()
-                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
+                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
                     .sum();
 
-            Double diferenceDebito = Math.abs(debito - abono);
+            Double diferenceDebito = Math.abs(debito - cargo);
 
             CompareDebitoResponse compareDebitoResponse = CompareDebitoResponse.builder()
                     .debito(Util.doubleToString(debito))
-                    .abono(Util.doubleToString(abono))
+                    .cargo(Util.doubleToString(cargo))
                     .diferencia(Util.doubleToString(diferenceDebito))
                     .build();
 
@@ -84,16 +81,17 @@ public class CompareServiceImpl implements ICompareService {
                     .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
                     .sum();
 
-            Double cargo = rowsFile2ByType
+            Double abono = rowsFile2ByType
                     .stream()
-                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
+                    .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
                     .sum();
 
-            Double diferenceCredito = Math.abs(credito - cargo);
+
+            Double diferenceCredito = credito - abono;
 
             CompareCreditoResponse compareCreditoResponse = CompareCreditoResponse.builder()
                     .credito(Util.doubleToString(credito))
-                    .cargo(Util.doubleToString(cargo))
+                    .abono(Util.doubleToString(abono))
                     .diferencia(Util.doubleToString(diferenceCredito))
                     .build();
 
@@ -115,16 +113,16 @@ public class CompareServiceImpl implements ICompareService {
                 .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
                 .sum();
 
-        Double abono = fileType2EntityList
+        Double cargo = fileType2EntityList
                 .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
                 .sum();
 
-        Double diferenceDebito = Math.abs(debito - abono);
+        Double diferenceDebito = Math.abs(debito - cargo);
 
         CompareDebitoResponse compareDebitoResponse = CompareDebitoResponse.builder()
                 .debito(Util.doubleToString(debito))
-                .abono(Util.doubleToString(abono))
+                .cargo(Util.doubleToString(cargo))
                 .diferencia(Util.doubleToString(diferenceDebito))
                 .build();
 
@@ -134,16 +132,16 @@ public class CompareServiceImpl implements ICompareService {
                 .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
                 .sum();
 
-        Double cargo = fileType2EntityList
+        Double abono = fileType2EntityList
                 .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
+                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
                 .sum();
 
-        Double diferenceCredito = Math.abs(credito - cargo);
+        Double diferenceCredito = Math.abs(credito - abono);
 
         CompareCreditoResponse compareCreditoResponse = CompareCreditoResponse.builder()
                 .credito(Util.doubleToString(credito))
-                .cargo(Util.doubleToString(cargo))
+                .abono(Util.doubleToString(abono))
                 .diferencia(Util.doubleToString(diferenceCredito))
                 .build();
 

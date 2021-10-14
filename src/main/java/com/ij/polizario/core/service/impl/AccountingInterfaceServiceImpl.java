@@ -5,12 +5,14 @@ import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.exception.BusinessException;
 import com.ij.polizario.exception.BusinessExceptionEnum;
 import com.ij.polizario.persistence.entities.FileType1Entity;
+import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.ports.input.controller.response.AccountingInterfaceResponse;
 import com.ij.polizario.ports.input.controller.response.ContractResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -55,7 +57,7 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
                     .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getCreditValue()),entity.getOperationSign()))
                     .sum();
 
-            Double total = debit - credit;
+            Double diferencia = debit - credit;
 
             LinkedHashSet<String> accountingTypesValues = getAccountingList(interfaceData);
 
@@ -65,7 +67,7 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
                     .accountingTypes(accountingTypesValues)
                     .totalCreditValue(Util.doubleToString(credit))
                     .totalDebitValue(Util.doubleToString(debit))
-                    .totalOperationValue(Util.doubleToString(total))
+                    .diferencia(Util.doubleToString(diferencia))
                     .contractList(contractList)
                     .build();
 
@@ -128,7 +130,7 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
         throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
     }
 
-    private BatchStatus lunchFileLoaderJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+    public BatchStatus lunchFileLoaderJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         fileType1Repository.deleteAll();
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("date", UUID.randomUUID().toString())
@@ -137,5 +139,10 @@ public class AccountingInterfaceServiceImpl implements IAccountingInterfaceServi
         JobExecution execution = jobLauncher.run(polizarioJob, jobParameters);
         log.info("Execution {} ", execution.getStatus());
         return execution.getStatus();
+    }
+
+    public List<FileType1Entity> generateData(AccountingInterfaceRequest request) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        lunchFileLoaderJob();
+        return getInterfaceData(request);
     }
 }

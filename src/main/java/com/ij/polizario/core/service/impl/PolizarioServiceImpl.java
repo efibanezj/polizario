@@ -111,15 +111,11 @@ public class PolizarioServiceImpl implements IPolizarioService {
 
             try {
                 FileInputStream fstream = new FileInputStream(file);
-//            FileInputStream fstream = new FileInputStream("C:\\Develop\\Projects\\Polizario\\polizarioFileLoader\\src\\main\\resources\\data\\POLIZARI.UG.F210719.LEY1116.TXT");
                 BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
 
                 String strLine;
-                //Loop through and check if a header or footer line, if not
-                //equate a substring to a temp variable and print it....
                 while ((strLine = br.readLine()) != null) {
-//      if (!(strLine.charAt(1) == "h" || strLine.charAt(1) == "f"))
                     if (strLine.contains("FECHA CONTABLE :")) {
 
                         String fecha = strLine.substring(17, 27);// 2021-07-19

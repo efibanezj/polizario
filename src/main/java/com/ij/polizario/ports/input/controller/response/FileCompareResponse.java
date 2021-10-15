@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -13,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class FileCompareResponse {
 
-    private List<FileCompareDetailResponse> compare;
+    private Map<String,String> resultMap;
+
+    private List<FileCompareDetailResponse> details;
 
 }

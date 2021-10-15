@@ -2,7 +2,7 @@ CREATE TABLE file_type1
 (
     id              INT(100) NOT NULL AUTO_INCREMENT,
     column_A        VARCHAR(100),
-    column_B        VARCHAR(100),
+    fecha_contable  VARCHAR(100),
     column_C        VARCHAR(100),
     column_D        VARCHAR(100),
     column_E        VARCHAR(100),
@@ -16,7 +16,7 @@ CREATE TABLE file_type1
     column_M        VARCHAR(100),
     column_N        VARCHAR(100),
     column_O        VARCHAR(100),
-    operation_sign        VARCHAR(100),
+    operation_sign  VARCHAR(100),
     debit_value     VARCHAR(100),
     credit_value    VARCHAR(100),
     column_S        VARCHAR(100),
@@ -55,12 +55,12 @@ CREATE TABLE file_type1
 
 CREATE TABLE file_type2
 (
-    id             INT(100) NOT NULL AUTO_INCREMENT,
+    id              INT(100) NOT NULL AUTO_INCREMENT,
     accounting_date VARCHAR(500),
-    account        VARCHAR(500),
-    cargo          VARCHAR(500),
-    abono          VARCHAR(500),
-    accounting_type          VARCHAR(100),
-    description    VARCHAR(500),
+    account         VARCHAR(500),
+    cargo           VARCHAR(500),
+    abono           VARCHAR(500),
+    accounting_type VARCHAR(100),
+    description     VARCHAR(500),
     PRIMARY KEY (id)
 );

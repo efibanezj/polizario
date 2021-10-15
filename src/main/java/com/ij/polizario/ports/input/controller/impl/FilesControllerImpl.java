@@ -2,6 +2,7 @@ package com.ij.polizario.ports.input.controller.impl;
 
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.ICompareService;
+import com.ij.polizario.core.service.IExportFileService;
 import com.ij.polizario.core.service.IPolizarioService;
 import com.ij.polizario.ports.input.controller.IFilesController;
 import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
@@ -26,6 +27,7 @@ public class FilesControllerImpl implements IFilesController {
     private final IPolizarioService IPolizarioService;
     private final IAccountingInterfaceService iAccountingInterfaceService;
     private final ICompareService iCompareService;
+    private final IExportFileService iExportFileService;
 
     @GetMapping("/polizario")
     public PolizarioResponse getPolizarioInfo() {
@@ -48,7 +50,10 @@ public class FilesControllerImpl implements IFilesController {
             @RequestParam(required = false) String contractsNumbers)
             throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
-        return iCompareService.compare(accountingTypes, contractsNumbers);
+        FileCompareResponse fileCompareResponse = iCompareService.compare(accountingTypes, contractsNumbers);
+        iExportFileService.exportToExcel();
+
+        return fileCompareResponse;
     }
 
 }

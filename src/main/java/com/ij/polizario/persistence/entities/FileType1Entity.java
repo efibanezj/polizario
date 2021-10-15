@@ -18,7 +18,7 @@ public class FileType1Entity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String column_A;
-    private String column_B;
+    private String fechaContable;
     private String column_C;
     private String column_D;
     private String column_E;

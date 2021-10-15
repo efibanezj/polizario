@@ -43,7 +43,7 @@ public class CompareServiceImpl implements ICompareService {
 
         Set<String> tiposContables = new LinkedHashSet<>();
         fileType1EntityList.forEach(fileType1Entity -> tiposContables.add(fileType1Entity.getAccountingType()));
-
+        Map<String,String> mapResults = new LinkedHashMap();
 
         for (String tipo : tiposContables) {
 
@@ -102,60 +102,13 @@ public class CompareServiceImpl implements ICompareService {
                     .tipo(tipo)
                     .build();
 
-            compare.add(fileCompareDetailResponse);
 
+            Double diferenceTotal = diferenceCredito - diferenceDebito;
+
+            compare.add(fileCompareDetailResponse);
+            mapResults.put(tipo,Util.doubleToString(diferenceTotal));
         }
 
-
-        //ALL
-        Double debito = fileType1EntityList
-                .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getDebitValue()))
-                .sum();
-
-        Double cargo = fileType2EntityList
-                .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCargo()))
-                .sum();
-
-        Double diferenceDebito = Math.abs(debito - cargo);
-
-        CompareDebitoResponse compareDebitoResponse = CompareDebitoResponse.builder()
-                .debito(Util.doubleToString(debito))
-                .cargo(Util.doubleToString(cargo))
-                .diferencia(Util.doubleToString(diferenceDebito))
-                .build();
-
-
-        Double credito = fileType1EntityList
-                .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getCreditValue()))
-                .sum();
-
-        Double abono = fileType2EntityList
-                .stream()
-                .mapToDouble(entity -> Util.mapDoubleNumber(entity.getAbono()))
-                .sum();
-
-        Double diferenceCredito = Math.abs(credito - abono);
-
-        CompareCreditoResponse compareCreditoResponse = CompareCreditoResponse.builder()
-                .credito(Util.doubleToString(credito))
-                .abono(Util.doubleToString(abono))
-                .diferencia(Util.doubleToString(diferenceCredito))
-                .build();
-
-
-        FileCompareDetailResponse fileCompareDetailResponse = FileCompareDetailResponse.builder()
-                .credito(compareCreditoResponse)
-                .debito(compareDebitoResponse)
-                .tipo("Todos")
-                .build();
-
-        compare.add(fileCompareDetailResponse);
-
-
-
-        return FileCompareResponse.builder().compare(compare).build();
+        return FileCompareResponse.builder().resultMap(mapResults).details(compare).build();
     }
 }

@@ -31,3 +31,10 @@ AGRGAR ALGO PARA IDENTIFICAR UNAS CUENTAS PROBLEMAS PARAMETRIZABLES
 
 ...........Preguntas
 que significa el "-" a la derecha de los números?
+
+
+
+
+------------------Siguiente paso
+arreglar visualemnte lso reustlados de las fdiferentica sy colocar nombre s de archivo
+Generar en elexel lso detalles por tipod e archivo en otras hojas del mismo excel de resultados

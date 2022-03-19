@@ -1,4 +1,4 @@
-package com.ij.polizario.ports.input.controller.response;
+package com.ij.polizario.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContractResponse {
-    private String contractNumber;
-    private String debit;
-    private String credit;
+public class ContractPolizarioResponse {
+    private String contrato;
+    private String abono;
+    private String cargo;
     private String total;
 
 }

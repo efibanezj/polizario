@@ -1,5 +1,5 @@
 
-Etapa verificación integridad de archivos. Objetivo garantizar que los archivos se teneraron correctamente
+Etapa verificación integridad de archivos. Objetivo garantizar que los archivos se generaron correctamente
 
 1. Descarga manual de los archivos de prueba
 2. Los archivos de prueba pueden ser tipo 1, 2,3

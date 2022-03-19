@@ -1,6 +1,6 @@
 package com.ij.polizario.core.service;
 
-import com.ij.polizario.ports.input.controller.response.FileCompareResponse;
+import com.ij.polizario.controller.response.FileCompareResponse;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;

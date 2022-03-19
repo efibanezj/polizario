@@ -1,14 +1,13 @@
-package com.ij.polizario.ports.input.controller.impl;
+package com.ij.polizario.controller.impl;
 
+import com.ij.polizario.controller.request.AccountingInterfaceRequest;
+import com.ij.polizario.controller.response.FileCompareResponse;
+import com.ij.polizario.controller.response.PolizarioResponse;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.ICompareService;
 import com.ij.polizario.core.service.IExportFileService;
 import com.ij.polizario.core.service.IPolizarioService;
-import com.ij.polizario.ports.input.controller.IFilesController;
-import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
-import com.ij.polizario.ports.input.controller.response.AccountingInterfaceResponse;
-import com.ij.polizario.ports.input.controller.response.FileCompareResponse;
-import com.ij.polizario.ports.input.controller.response.PolizarioResponse;
+import com.ij.polizario.controller.response.AccountingInterfaceResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/files")
 @AllArgsConstructor
-public class FilesControllerImpl implements IFilesController {
+public class FilesControllerImpl {
 
     private final IPolizarioService IPolizarioService;
     private final IAccountingInterfaceService iAccountingInterfaceService;

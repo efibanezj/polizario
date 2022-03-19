@@ -1,4 +1,4 @@
-package com.ij.polizario.ports.input.controller.response.excel;
+package com.ij.polizario.controller.response.excel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

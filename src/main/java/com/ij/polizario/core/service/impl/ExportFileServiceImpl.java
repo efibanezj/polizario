@@ -6,7 +6,7 @@ import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
-import com.ij.polizario.ports.input.controller.response.excel.FileCompareExcel;
+import com.ij.polizario.controller.response.excel.FileCompareExcel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

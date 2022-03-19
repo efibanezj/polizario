@@ -1,6 +1,10 @@
 package com.ij.polizario.core.service.impl;
 
 import com.ij.polizario.Util.Util;
+import com.ij.polizario.controller.response.CompareCreditoResponse;
+import com.ij.polizario.controller.response.CompareDebitoResponse;
+import com.ij.polizario.controller.response.FileCompareDetailResponse;
+import com.ij.polizario.controller.response.FileCompareResponse;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.ICompareService;
 import com.ij.polizario.core.service.IPolizarioService;
@@ -8,8 +12,7 @@ import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
-import com.ij.polizario.ports.input.controller.request.AccountingInterfaceRequest;
-import com.ij.polizario.ports.input.controller.response.*;
+import com.ij.polizario.controller.request.AccountingInterfaceRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -19,7 +22,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,26 +38,24 @@ public class CompareServiceImpl implements ICompareService {
 
         AccountingInterfaceRequest interfaceRequest = new AccountingInterfaceRequest(accountingTypes, contractsNumbers);
         List<FileType1Entity> fileType1EntityList = iAccountingInterfaceService.generateData(interfaceRequest);
-        List<FileType2Entity>  fileType2EntityList = IPolizarioService.generateData();
+        List<FileType2Entity> fileType2EntityList = IPolizarioService.generateData();
 
 
         List<FileCompareDetailResponse> compare = new ArrayList<>();
 
         Set<String> tiposContables = new LinkedHashSet<>();
         fileType1EntityList.forEach(fileType1Entity -> tiposContables.add(fileType1Entity.getAccountingType()));
-        Map<String,String> mapResults = new LinkedHashMap();
+        Map<String, String> mapResults = new LinkedHashMap();
 
         for (String tipo : tiposContables) {
 
             List<FileType1Entity> rowsFile1ByType = fileType1EntityList
                     .stream()
-                    .filter(fileType1Entity -> fileType1Entity.getAccountingType().equalsIgnoreCase(tipo))
-                    .collect(Collectors.toList());
+                    .filter(fileType1Entity -> fileType1Entity.getAccountingType().equalsIgnoreCase(tipo)).toList();
 
             List<FileType2Entity> rowsFile2ByType = fileType2EntityList
                     .stream()
-                    .filter(fileType2Entity -> fileType2Entity.getAccountingType().equalsIgnoreCase(tipo))
-                    .collect(Collectors.toList());
+                    .filter(fileType2Entity -> fileType2Entity.getAccountingType().equalsIgnoreCase(tipo)).toList();
 
             Double debito = rowsFile1ByType
                     .stream()
@@ -106,7 +106,7 @@ public class CompareServiceImpl implements ICompareService {
             Double diferenceTotal = diferenceCredito - diferenceDebito;
 
             compare.add(fileCompareDetailResponse);
-            mapResults.put(tipo,Util.doubleToString(diferenceTotal));
+            mapResults.put(tipo, Util.doubleToString(diferenceTotal));
         }
 
         return FileCompareResponse.builder().resultMap(mapResults).details(compare).build();

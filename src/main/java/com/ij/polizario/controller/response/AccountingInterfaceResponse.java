@@ -1,4 +1,4 @@
-package com.ij.polizario.ports.input.controller.response;
+package com.ij.polizario.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +12,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PolizarioResponse {
+public class AccountingInterfaceResponse {
 
-    private String totalCargoValue;
-    private String totalAbonoValue;
+    private String totalDebitValue;
+    private String totalCreditValue;
     private String diferencia;
     private LinkedHashSet<String> accountingTypes;
-    private List<ContractPolizarioResponse> contractList;
+    private List<ContractResponse> contractList;
 }

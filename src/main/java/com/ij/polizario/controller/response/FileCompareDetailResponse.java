@@ -1,4 +1,4 @@
-package com.ij.polizario.ports.input.controller.response;
+package com.ij.polizario.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

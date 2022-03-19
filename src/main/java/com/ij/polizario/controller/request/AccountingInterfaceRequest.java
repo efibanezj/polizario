@@ -1,4 +1,4 @@
-package com.ij.polizario.ports.input.controller.request;
+package com.ij.polizario.controller.request;
 
 import lombok.*;
 

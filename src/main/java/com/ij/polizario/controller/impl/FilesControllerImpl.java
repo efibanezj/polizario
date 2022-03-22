@@ -6,8 +6,8 @@ import com.ij.polizario.controller.response.PolizarioResponse;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.ICompareService;
 import com.ij.polizario.core.service.IExportFileService;
-import com.ij.polizario.core.service.IPolizarioService;
 import com.ij.polizario.controller.response.AccountingInterfaceResponse;
+import com.ij.polizario.core.service.impl.OldPolizarioServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class FilesControllerImpl {
 
-    private final IPolizarioService IPolizarioService;
+    private final OldPolizarioServiceImpl IPolizarioService;
     private final IAccountingInterfaceService iAccountingInterfaceService;
     private final ICompareService iCompareService;
     private final IExportFileService iExportFileService;

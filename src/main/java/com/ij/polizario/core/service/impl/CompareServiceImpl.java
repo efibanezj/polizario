@@ -1,18 +1,17 @@
 package com.ij.polizario.core.service.impl;
 
 import com.ij.polizario.Util.Util;
+import com.ij.polizario.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.controller.response.CompareCreditoResponse;
 import com.ij.polizario.controller.response.CompareDebitoResponse;
 import com.ij.polizario.controller.response.FileCompareDetailResponse;
 import com.ij.polizario.controller.response.FileCompareResponse;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.core.service.ICompareService;
-import com.ij.polizario.core.service.IPolizarioService;
 import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
-import com.ij.polizario.controller.request.AccountingInterfaceRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -28,7 +27,7 @@ import java.util.*;
 @AllArgsConstructor
 public class CompareServiceImpl implements ICompareService {
 
-    private final IPolizarioService IPolizarioService;
+    private final OldPolizarioServiceImpl IPolizarioService;
     private final IAccountingInterfaceService iAccountingInterfaceService;
     private final FileType1Repository fileType1Repository;
     private final FileType2Repository fileType2Repository;

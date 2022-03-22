@@ -1,7 +1,6 @@
 package com.ij.polizario.core.service.impl;
 
 import com.ij.polizario.Util.Util;
-import com.ij.polizario.core.service.IPolizarioService;
 import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
 import com.ij.polizario.controller.response.ContractPolizarioResponse;
@@ -19,18 +18,17 @@ import static java.lang.System.in;
 
 @Slf4j
 @Service
-public class PolizarioServiceImpl implements IPolizarioService {
+public class OldPolizarioServiceImpl {
 
     private final String fileType2FilesPath;
 
     private final FileType2Repository fileType2Repository;
 
-    public PolizarioServiceImpl(FileType2Repository fileType2Repository, @Value("${fileType2.files.path}") String fileType2FilesPath) {
+    public OldPolizarioServiceImpl(FileType2Repository fileType2Repository, @Value("${fileType2.files.path}") String fileType2FilesPath) {
         this.fileType2Repository = fileType2Repository;
         this.fileType2FilesPath = fileType2FilesPath;
     }
 
-    @Override
     public PolizarioResponse generatePolizario() {
 
         List<FileType2Entity> data = generateData();

@@ -13,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "file_type1")
+@Deprecated
 public class FileType1Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

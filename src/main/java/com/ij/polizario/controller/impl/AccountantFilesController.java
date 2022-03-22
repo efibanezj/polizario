@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 
 @RestController
@@ -21,10 +22,10 @@ public class AccountantFilesController {
 
     private final AccountantInterfaceService accountantInterfaceService;
 
-    @GetMapping("/resume")
+    @GetMapping("/{type}/resume")
     @ResponseStatus(code = HttpStatus.OK)
-    public String generateAccountantInterfaceResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
-        String fileName = accountantInterfaceService.generateResumeFile();
+    public String generateAccountantInterfaceResume(@PathParam("type") String type) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
+        String fileName = accountantInterfaceService.generateResumeFile(type);
         return "Archivo generado: "+fileName;
     }
 }

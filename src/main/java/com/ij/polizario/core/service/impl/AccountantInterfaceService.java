@@ -33,7 +33,7 @@ public class AccountantInterfaceService {
     private String[] listQhZda;
     @Value("${qh.files.output.path}")
     private String outputPath;
-    private QhInfoRepository qhInfoRepository;
+    private final QhInfoRepository qhInfoRepository;
     private final JobLauncher jobLauncher;
     private final Job qhLoaderJob;
 
@@ -43,8 +43,16 @@ public class AccountantInterfaceService {
         this.qhInfoRepository = qhInfoRepository;
     }
 
-    public String generateResumeFile() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
+    public String generateResumeFile(String type) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
 
+        if (type.equalsIgnoreCase("qh")) {
+            return generateQhResume();
+        } else {
+            throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
+        }
+    }
+
+    private String generateQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
         BatchStatus batchStatus = launchResumeFileLoadProccess();
         if (batchStatus == BatchStatus.COMPLETED) {
 
@@ -74,7 +82,7 @@ public class AccountantInterfaceService {
     private String exportFile(List<AccountantOperationQHResumeResponse> responseList) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
-        String fileName = outputPath+formatter.format(LocalDateTime.now())+".txt";
+        String fileName = outputPath + formatter.format(LocalDateTime.now()) + ".txt";
 
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);

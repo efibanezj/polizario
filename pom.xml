@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ij</groupId>
-    <artifactId>polizarioFileLoader</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>polizarioProject</artifactId>
+    <version>0.0.1</version>
     <name>polizarioFileLoader</name>
     <description>Polizario File Loader</description>
     <properties>

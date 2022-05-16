@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/files")
 @AllArgsConstructor
+@Deprecated
 public class FilesControllerImpl {
 
     private final OldPolizarioServiceImpl IPolizarioService;

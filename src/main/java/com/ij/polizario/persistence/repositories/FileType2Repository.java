@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+@Deprecated
 public interface FileType2Repository extends CrudRepository<FileType2Entity,Integer> {
 
 

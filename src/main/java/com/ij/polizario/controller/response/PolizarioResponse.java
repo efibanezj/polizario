@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated
 public class PolizarioResponse {
 
     private String totalCargoValue;

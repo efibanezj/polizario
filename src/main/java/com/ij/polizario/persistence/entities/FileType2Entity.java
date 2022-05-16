@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @Table(name = "file_type2")
+@Deprecated
 public class FileType2Entity {
 
     @Id

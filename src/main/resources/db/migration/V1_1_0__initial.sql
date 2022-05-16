@@ -119,3 +119,26 @@ CREATE TABLE QH_INFO
     column_AW       VARCHAR(100),
     PRIMARY KEY (id)
 );
+
+
+
+CREATE TABLE polizario_file
+(
+    id              INT(100) NOT NULL AUTO_INCREMENT,
+    accountant_date        VARCHAR(500),
+    sequence_number        VARCHAR(500),
+    account         VARCHAR(500),
+    operate_center           VARCHAR(500),
+    destiny_center           VARCHAR(500),
+    accounting_type VARCHAR(500),
+    debits VARCHAR(500),
+    credits VARCHAR(500),
+    correct_indicator VARCHAR(500),
+    accountant_operation VARCHAR(500),
+    cross_reference VARCHAR(500),
+    description VARCHAR(500),
+    application     VARCHAR(500),
+    pd     VARCHAR(500),
+    currency     VARCHAR(500),
+    PRIMARY KEY (id)
+);

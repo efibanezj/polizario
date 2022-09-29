@@ -4,7 +4,6 @@ import com.ij.polizario.Util.Util;
 import com.ij.polizario.core.service.IAccountingInterfaceService;
 import com.ij.polizario.exception.BusinessException;
 import com.ij.polizario.exception.BusinessExceptionEnum;
-import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.controller.response.AccountingInterfaceResponse;

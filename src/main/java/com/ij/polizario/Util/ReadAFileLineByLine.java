@@ -1,6 +1,5 @@
 package com.ij.polizario.Util;
 
-import com.ij.polizario.persistence.entities.FileType2Entity;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

@@ -1,0 +1,7 @@
+
+### Polizario
+GET http://localhost:8080/polizario/resume
+
+
+### Interfaz QH
+GET http://localhost:8080/accountant-interfaces/qh/resume

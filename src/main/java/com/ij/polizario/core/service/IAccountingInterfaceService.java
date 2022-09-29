@@ -1,6 +1,5 @@
 package com.ij.polizario.core.service;
 
-import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.controller.request.AccountingInterfaceRequest;
 import com.ij.polizario.controller.response.AccountingInterfaceResponse;
 import org.springframework.batch.core.JobParametersInvalidException;

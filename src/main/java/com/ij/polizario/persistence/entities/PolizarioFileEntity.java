@@ -49,7 +49,7 @@ public class PolizarioFileEntity {
         this.destinyCenter = line.substring(27, 32).trim();
         this.debits = line.substring(32, 58).trim();
         this.credits = line.substring(58, 84).trim();
-        this.correctIndicator = line.substring(85, 86).trim();
+        this.correctIndicator = line.substring(84, 86).trim();
         this.accountantOperation = line.substring(86, 90).trim();
         this.crossReference = line.substring(90, 102).trim();
         this.description = line.substring(104, 133).trim();

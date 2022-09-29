@@ -1,6 +1,5 @@
 package com.ij.polizario.persistence.repositories;
 
-import com.ij.polizario.persistence.entities.FileType1Entity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

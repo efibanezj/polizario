@@ -7,7 +7,12 @@ import com.ij.polizario.exception.BusinessExceptionEnum;
 import com.ij.polizario.persistence.entities.QhInfoEntity;
 import com.ij.polizario.persistence.repositories.QhInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -21,7 +26,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -82,7 +91,7 @@ public class AccountantInterfaceService {
     private String exportFile(List<AccountantOperationQHResumeResponse> responseList) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
-        String fileName = outputPath + formatter.format(LocalDateTime.now()) + ".txt";
+        String fileName = outputPath + "QH - "+formatter.format(LocalDateTime.now()) + ".txt";
 
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);

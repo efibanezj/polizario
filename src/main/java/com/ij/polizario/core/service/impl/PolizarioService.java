@@ -120,7 +120,7 @@ public class PolizarioService {
     private String exportFile(List<PolizarioResumeResponse> responseList) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
-        String fileName = outputPath + formatter.format(LocalDateTime.now()) + ".txt";
+        String fileName = outputPath + "POLIZARIO - "+formatter.format(LocalDateTime.now()) + ".txt";
 
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);

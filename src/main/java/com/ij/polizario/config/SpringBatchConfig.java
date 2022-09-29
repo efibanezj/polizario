@@ -1,6 +1,5 @@
 package com.ij.polizario.config;
 
-import com.ij.polizario.persistence.entities.FileType1Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

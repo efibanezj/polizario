@@ -2,8 +2,6 @@ package com.ij.polizario.core.service.impl;
 
 import com.ij.polizario.Util.Util;
 import com.ij.polizario.core.service.IExportFileService;
-import com.ij.polizario.persistence.entities.FileType1Entity;
-import com.ij.polizario.persistence.entities.FileType2Entity;
 import com.ij.polizario.persistence.repositories.FileType1Repository;
 import com.ij.polizario.persistence.repositories.FileType2Repository;
 import com.ij.polizario.controller.response.excel.FileCompareExcel;

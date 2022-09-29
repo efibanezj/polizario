@@ -1,4 +1,4 @@
-package com.ij.polizario.core.service.impl;
+package com.ij.polizario.core.service;
 
 import com.ij.polizario.controller.response.PolizarioResumeResponse;
 import com.ij.polizario.persistence.entities.PolizarioFileEntity;

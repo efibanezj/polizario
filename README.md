@@ -19,8 +19,8 @@ mvn clean install
 ## API
 * **Polizario API**: This API generated a consolidate file with information of ***polizario*** files.
   * Ex : POLIZARI.UG.F210511.CRS814.TXT
-    ```
-    GET http://localhost:8080/polizario/resume
+  ```
+   GET http://localhost:8080/polizario/resume
     ```
 
 * **Interfaz API**

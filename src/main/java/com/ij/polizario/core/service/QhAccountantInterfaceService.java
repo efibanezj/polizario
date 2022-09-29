@@ -1,4 +1,4 @@
-package com.ij.polizario.core.service.impl;
+package com.ij.polizario.core.service;
 
 import com.ij.polizario.Util.Util;
 import com.ij.polizario.controller.response.AccountantOperationQHResumeResponse;
@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
 @Service
-public class AccountantInterfaceService {
+public class QhAccountantInterfaceService {
 
     @Value("${qh.zda}")
     private String[] listQhZda;
@@ -46,22 +46,44 @@ public class AccountantInterfaceService {
     private final JobLauncher jobLauncher;
     private final Job qhLoaderJob;
 
-    public AccountantInterfaceService(JobLauncher jobLauncher, @Qualifier("qhLoaderJob") Job qhLoaderJob, QhInfoRepository qhInfoRepository) {
+    public QhAccountantInterfaceService(JobLauncher jobLauncher, @Qualifier("qhLoaderJob") Job qhLoaderJob, QhInfoRepository qhInfoRepository) {
         this.jobLauncher = jobLauncher;
         this.qhLoaderJob = qhLoaderJob;
         this.qhInfoRepository = qhInfoRepository;
     }
 
-    public String generateResumeFile(String type) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
-
-        if (type.equalsIgnoreCase("qh")) {
+    public String generateResumeFile() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
             return generateQhResume();
+    }
+
+    private String generateQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
+        BatchStatus batchStatus = launchResumeFileLoadProccess();
+        if (batchStatus == BatchStatus.COMPLETED) {
+
+            List<QhInfoEntity> qhInfoList = qhInfoRepository.findAll();
+            qhInfoList.removeIf(el -> el.getAccountNumber().startsWith("8") || el.getAccountNumber().startsWith("6"));
+
+            Map<String, List<QhInfoEntity>> mapQhInfoByAccountantDate = qhInfoList.stream()
+                    .collect(groupingBy(QhInfoEntity::getAccountantDate));
+
+            List<AccountantOperationQHResumeResponse> responseList = new ArrayList<>();
+            for (Map.Entry<String, List<QhInfoEntity>> entry : mapQhInfoByAccountantDate.entrySet()) {
+                List<AccountantOperationQHResumeResponse> a = entry.getValue().stream()
+                        .collect(groupingBy(QhInfoEntity::getAccountNumber))
+                        .values()
+                        .stream()
+                        .map(this::calculateQhInfoResume).toList();
+                responseList.addAll(a);
+            }
+
+
+            return exportFile(responseList);
         } else {
             throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
         }
     }
 
-    private String generateQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
+    private String generateNoQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
         BatchStatus batchStatus = launchResumeFileLoadProccess();
         if (batchStatus == BatchStatus.COMPLETED) {
 

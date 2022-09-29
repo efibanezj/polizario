@@ -1,6 +1,6 @@
 package com.ij.polizario.controller;
 
-import com.ij.polizario.core.service.impl.PolizarioService;
+import com.ij.polizario.core.service.PolizarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

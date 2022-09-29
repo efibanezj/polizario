@@ -1,0 +1,95 @@
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+9999 TOTAL BANCO                                                                                                                                
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2022-05-11                                                                                                                     
+FECHA PROCESO  : 2022-06-22                                                                                                                     
+                                                                                                                                                
+          CUENTA      CORRECCION      DESCRIPCION                                 SALDO AL DEBE           SALDO AL HABER                        
+     --------------   ---------     --------------------------------         ------------------       ------------------                        
+                                                                                                                                                
+    190405021                       2- ALTAMIRA -HA0                                    776,433.00                  776,433.00                  
+    196095001772                    2- TELEPROCESO ON LINE T4 -BG1 -                    773,340.00                  774,828.00                  
+    210505601998001                 2- SALDO DISPONIBLE -BG1                            776,433.00                        0.00                  
+    210805701998                    2- PARTICULARES -BG1                                  1,494.00                  773,340.00                  
+    250605001                       2- SOBRE CUENTAS CORRIENTES -BG1                          0.00                    3,093.00                  
+    250610001                       2- SOBRE CUENTAS DE AHORRO -BG1                           0.00                        6.00                  
+                                                            TOTAL                     2,327,700.00                2,327,700.00                  
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   1                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0008   CC APLICACIÓN CONTABLE                                                                                                                   
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2022-05-11                                                                                                                     
+FECHA PROCESO  : 2022-06-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0022     USUARIO : HA4CPOL1                                                                                                           
+                                                                                                                                                
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00001 190405021       0008 0008                  3,099.00                      0.00   009                                             INO       
+00002 190405021       0008 0034                773,334.00                      0.00   009                                             INO       
+00003 190405021       0008 0073                      0.00                776,433.00   009                                             INO       
+                      TOTAL                    776,433.00                776,433.00                                                             
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   2                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0034   CENTRO COMERCIAL AVENIDA CHILE                                                                                                           
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2022-05-11                                                                                                                     
+FECHA PROCESO  : 2022-06-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0014     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00003 250610001       0034 0008                      0.00                      6.00   056 000000110522 000005642  15.21.20.408272     BG1       
+00001 196095001772    0034 0034                      0.00                  1,250.00   D32 000000110522 000005643  15.21.20.407133     BG1       
+00002 196095001772    0034 0034                      0.00                    238.00   732 000000110522 000005645  15.21.20.411311     BG1       
+00004 210805701998    0034 0034                  1,250.00                      0.00   D32 000000110522 000005643  15.21.20.407133     BG1       
+00005 210805701998    0034 0034                      6.00                      0.00   056 000000110522 000005642  15.21.20.408272     BG1       
+00006 210805701998    0034 0034                    238.00                      0.00   732 000000110522 000005645  15.21.20.411311     BG1       
+                      TOTAL                      1,494.00                  1,494.00                                                             
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   3                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0073   AVENIDA CHILE                                                                                                                            
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2022-05-11                                                                                                                     
+FECHA PROCESO  : 2022-06-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0016     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00001 250605001       0073 0008                      0.00                  3,093.00   056 000000110522 000009909  15.21.20.216811     BG1       
+00002 210505601998001 0073 0073                  3,093.00                      0.00   056 000000110522 000009909  15.21.20.216811     BG1       
+                      TOTAL                      3,093.00                  3,093.00                                                             
+                                                                                                                                                
+HA4CPOL0                                          DIARIO DE MOVIMIENTOS POR CENTRO DE ORIGEN                    HOJA:   4                       
+                                                            MONEDA NACIONAL                                                                     
+                                                                                                                                                
+0767   ENLACE DE APLICATIVOS                                                                                                                    
+                                                                                                                                                
+EMPRESA : 0013                                                                                                                                  
+FECHA CONTABLE : 2022-05-11                                                                                                                     
+FECHA PROCESO  : 2022-06-22                                                                                                                     
+                                                                                                                                                
+ASIENTO : 0008     USUARIO : HA4C0100                                                                                                           
+                                                                                                                                                
+ SEQ. CUENTA          C.OP C.D.         CARGOS                 ABONOS         C C.C. REF. CRUCE           DESCRIPCION           INT PD    DIVISA
+----- --------------- ---- ----     ------------------     ------------------ - --- ------------ ------------------------------ --- --   -------
+00004 210805701998    0767 0034                      0.00                773,340.00   D27 000000110522 000005641  15.21.20.234608     BG1       
+00003 210505601998001 0767 0073                773,340.00                      0.00   151 000000110522 000009910  15.21.20.215478     BG1       
+00001 196095001772    0767 0767                773,340.00                      0.00   D27 000000110522 000005641  15.21.20.234608     BG1       
+00002 196095001772    0767 0767                      0.00                773,340.00   151 000000110522 000009910  15.21.20.215478     BG1       
+                      TOTAL                  1,546,680.00              1,546,680.00                                                             

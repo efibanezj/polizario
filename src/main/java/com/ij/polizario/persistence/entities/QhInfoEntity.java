@@ -32,7 +32,7 @@ public class QhInfoEntity {
     private String column_M;
     private String column_N;
     private String column_O;
-    private String operationSign; //TODO validate name of this field
+    private String operationSign; //This field is "correctora"
     private String debitValue; //TODO wht means "-" sign right t to the debit or credit value?
     private String creditValue;
     private String column_S;

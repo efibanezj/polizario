@@ -1,18 +1,23 @@
 package com.ij.polizario.config.mapper;
 
 import com.ij.polizario.persistence.entities.NoQhInfoEntity;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
-import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.batch.item.file.LineMapper;
 
-public class NoQhFieldSetMapper implements FieldSetMapper<NoQhInfoEntity> {
+public class NoQhFieldSetMapper implements LineMapper<NoQhInfoEntity> {
+
 
     @Override
-    public NoQhInfoEntity mapFieldSet(FieldSet fieldSet) {
+    public NoQhInfoEntity mapLine(String value, int lineNumber){
 
-        NoQhInfoEntity product = new NoQhInfoEntity();
+        String impDebMl = value.substring(124,139);
+        String impCredMl = value.substring(139,154);
 
-        product.setEntidad(fieldSet.readString("entidad"));
-
-        return product;
+        return NoQhInfoEntity.builder()
+                .accountantDate(value.substring(7,15))
+                .impDebMl(impDebMl.substring(0,13) + "." + impDebMl.substring(13,15))
+                .impCredMl(impCredMl.substring(0,13) + "." + impCredMl.substring(13,15))
+                .operationSign(value.substring(184,185))
+                .cuenta1(value.substring(373,388).trim())
+                .build();
     }
 }

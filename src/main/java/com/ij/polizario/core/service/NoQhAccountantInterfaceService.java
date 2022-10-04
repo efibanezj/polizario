@@ -2,11 +2,9 @@ package com.ij.polizario.core.service;
 
 import com.ij.polizario.Util.Util;
 import com.ij.polizario.controller.response.AccountantOperationNoQHResumeResponse;
-import com.ij.polizario.controller.response.AccountantOperationQHResumeResponse;
 import com.ij.polizario.exception.BusinessException;
 import com.ij.polizario.exception.BusinessExceptionEnum;
 import com.ij.polizario.persistence.entities.NoQhInfoEntity;
-import com.ij.polizario.persistence.entities.QhInfoEntity;
 import com.ij.polizario.persistence.repositories.NoQhInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
@@ -32,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -56,12 +53,21 @@ public class NoQhAccountantInterfaceService {
         if (batchStatus == BatchStatus.COMPLETED) {
 
             List<NoQhInfoEntity> infoList = repo.findAll();
+            infoList.removeIf(el -> el.getCuenta1().startsWith("8") || el.getCuenta1().startsWith("6"));
 
-            List<AccountantOperationNoQHResumeResponse> responseList = infoList.stream().map(obj -> {
-                AccountantOperationNoQHResumeResponse resp = new AccountantOperationNoQHResumeResponse();
-                resp.setEntidad(obj.getEntidad());
-                return resp;
-            }).toList();
+            Map<String, List<NoQhInfoEntity>> mapQhInfoByAccountantDate = infoList.stream()
+                    .collect(groupingBy(NoQhInfoEntity::getAccountantDate));
+
+            List<AccountantOperationNoQHResumeResponse> responseList = new ArrayList<>();
+            for (Map.Entry<String, List<NoQhInfoEntity>> entry : mapQhInfoByAccountantDate.entrySet()) {
+                List<AccountantOperationNoQHResumeResponse> a = entry.getValue().stream()
+                        .collect(groupingBy(NoQhInfoEntity::getCuenta1))
+                        .values()
+                        .stream()
+                        .map(this::calculateInfoResume).toList();
+                responseList.addAll(a);
+            }
+
 
             return exportFile(responseList);
         } else {
@@ -71,29 +77,42 @@ public class NoQhAccountantInterfaceService {
 
     private String exportFile(List<AccountantOperationNoQHResumeResponse> responseList) throws IOException {
 
-        responseList.forEach(a -> System.out.println("["+a.getEntidad()+"]"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
+        String fileName = outputPath + "No-QH - "+formatter.format(LocalDateTime.now()) + ".txt";
 
-        return "fileName test";
+        File file = new File(fileName);
+        FileWriter fileWriter = new FileWriter(file, true);
+
+        fileWriter.write(String.join("/", "Fecha contable", "Número de cuenta", "Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
+        fileWriter.write("\r\n");
+
+        for (AccountantOperationNoQHResumeResponse op : responseList) {
+            fileWriter.write(op.getResumeLine());
+            fileWriter.write("\r\n");
+        }
+
+        fileWriter.close();
+        return fileName;
     }
 
-    private AccountantOperationQHResumeResponse calculateQhInfoResume(List<QhInfoEntity> qhInfoByAccountantNumber) {
+    private AccountantOperationNoQHResumeResponse calculateInfoResume(List<NoQhInfoEntity> qhInfoByAccountantNumber) {
 
         Double debit = qhInfoByAccountantNumber
                 .stream()
-                .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getDebitValue()), entity.getOperationSign()))
+                .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getImpDebMl()), entity.getOperationSign()))
                 .sum();
 
         Double credit = qhInfoByAccountantNumber
                 .stream()
-                .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getCreditValue()), entity.getOperationSign()))
+                .mapToDouble(entity -> calculateValueBySign(Util.mapDoubleNumber(entity.getImpCredMl()), entity.getOperationSign()))
                 .sum();
 
         Double diferrence = debit - credit;
 
         String accountantDate = qhInfoByAccountantNumber.stream().findAny().get().getAccountantDate();
-        String accountNumber = qhInfoByAccountantNumber.stream().findAny().get().getAccountNumber();
+        String accountNumber = qhInfoByAccountantNumber.stream().findAny().get().getCuenta1();
 
-        AccountantOperationQHResumeResponse response = AccountantOperationQHResumeResponse.builder()
+        AccountantOperationNoQHResumeResponse response = AccountantOperationNoQHResumeResponse.builder()
                 .accountantDate(accountantDate)
                 .accountNumber(accountNumber)
                 .totalDebit(Util.doubleToString(debit))
@@ -119,7 +138,7 @@ public class NoQhAccountantInterfaceService {
 
     private Double calculateValueBySign(Double value, String sign) {
 
-        if (sign.equalsIgnoreCase("C")) {
+        if ("C".equalsIgnoreCase(sign)) {
             return value * -1;
         }
         return value;

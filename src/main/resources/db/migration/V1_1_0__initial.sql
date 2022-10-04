@@ -56,7 +56,12 @@ CREATE TABLE qh_info
 CREATE TABLE no_qh_info
 (
     id              INT(100) NOT NULL AUTO_INCREMENT,
-    entidad        VARCHAR(100),
+    accountant_date        VARCHAR(100),
+    imp_deb_ml        VARCHAR(100),
+    imp_cred_ml        VARCHAR(100),
+    cuenta1        VARCHAR(100),
+    operation_sign        VARCHAR(100),
+
     PRIMARY KEY (id)
 );
 

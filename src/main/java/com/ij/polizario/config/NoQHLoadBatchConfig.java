@@ -13,11 +13,6 @@ import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.MultiResourceItemReader;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
-import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
-import org.springframework.batch.item.file.transform.LineTokenizer;
-import org.springframework.batch.item.file.transform.Range;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +58,6 @@ public class NoQHLoadBatchConfig {
     public MultiResourceItemReader<NoQhInfoEntity> noQhMultiAccountingInterfaceReader() {
         MultiResourceItemReader<NoQhInfoEntity> reader = new MultiResourceItemReader<>();
         reader.setDelegate(noQhAccountingInterfaceReader());
-        reader.setStrict(true);
         reader.setResources(filePath);
         return reader;
     }
@@ -71,17 +65,11 @@ public class NoQHLoadBatchConfig {
     @Bean
     public FlatFileItemReader<NoQhInfoEntity> noQhAccountingInterfaceReader() {
         FlatFileItemReader<NoQhInfoEntity> itemReader = new FlatFileItemReader<>();
-        itemReader.setLineMapper(noQhLineMapper());
+        itemReader.setLineMapper(noQhfieldSetMapper());
+
         return itemReader;
     }
 
-    @Bean
-    public LineMapper<NoQhInfoEntity> noQhLineMapper() {
-        DefaultLineMapper<NoQhInfoEntity> mapper = new DefaultLineMapper<>();
-        mapper.setLineTokenizer(noQhLineTokenizer());
-        mapper.setFieldSetMapper(noQhfieldSetMapper());
-        return mapper;
-    }
 
     @Bean
     public RepositoryItemWriter<NoQhInfoEntity> noQhItemWriter() {
@@ -91,21 +79,8 @@ public class NoQHLoadBatchConfig {
         return writer;
     }
 
-
     @Bean
-    public LineTokenizer noQhLineTokenizer() {
-
-
-        FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
-        tokenizer.setNames(new String[] { "entidad"});
-        tokenizer.setColumns(new Range[] {
-                new Range(1, 4)
-        });
-        return tokenizer;
-    }
-
-    @Bean
-    public FieldSetMapper<NoQhInfoEntity> noQhfieldSetMapper() {
+    public LineMapper<NoQhInfoEntity> noQhfieldSetMapper() {
         return new NoQhFieldSetMapper();
     }
 }

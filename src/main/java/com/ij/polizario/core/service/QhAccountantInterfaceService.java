@@ -83,33 +83,6 @@ public class QhAccountantInterfaceService {
         }
     }
 
-    private String generateNoQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
-        BatchStatus batchStatus = launchResumeFileLoadProccess();
-        if (batchStatus == BatchStatus.COMPLETED) {
-
-            List<QhInfoEntity> qhInfoList = qhInfoRepository.findAll();
-            qhInfoList.removeIf(el -> el.getAccountNumber().startsWith("8") || el.getAccountNumber().startsWith("6"));
-
-            Map<String, List<QhInfoEntity>> mapQhInfoByAccountantDate = qhInfoList.stream()
-                    .collect(groupingBy(QhInfoEntity::getAccountantDate));
-
-            List<AccountantOperationQHResumeResponse> responseList = new ArrayList<>();
-            for (Map.Entry<String, List<QhInfoEntity>> entry : mapQhInfoByAccountantDate.entrySet()) {
-                List<AccountantOperationQHResumeResponse> a = entry.getValue().stream()
-                        .collect(groupingBy(QhInfoEntity::getAccountNumber))
-                        .values()
-                        .stream()
-                        .map(this::calculateQhInfoResume).toList();
-                responseList.addAll(a);
-            }
-
-
-            return exportFile(responseList);
-        } else {
-            throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
-        }
-    }
-
     private String exportFile(List<AccountantOperationQHResumeResponse> responseList) throws IOException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
@@ -184,7 +157,7 @@ public class QhAccountantInterfaceService {
 
     private Double calculateValueBySign(Double value, String sign) {
 
-        if (sign.equalsIgnoreCase("C")) {
+        if ("C".equalsIgnoreCase(sign)) {
             return value * -1;
         }
         return value;

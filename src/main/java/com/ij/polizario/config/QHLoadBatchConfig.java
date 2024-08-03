@@ -68,6 +68,7 @@ public class QHLoadBatchConfig {
         MultiResourceItemReader<QhInfoEntity> reader = new MultiResourceItemReader<>();
         reader.setDelegate(qhAccountingInterfaceReader());
         reader.setResources(qhFilesPath);
+        reader.setStrict(true);
         return reader;
     }
 

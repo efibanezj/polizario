@@ -13,7 +13,7 @@ mvn clean install
 ## Usage
 
 ```shell
-java -jar target/polizarioProject-0.0.1.jar --spring.profiles.active=local
+java -jar polizarioProject-0.0.1.jar --spring.profiles.active=local
 ```
 ***
 ## API

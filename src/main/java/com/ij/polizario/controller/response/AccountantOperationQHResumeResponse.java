@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountantOperationQHResumeResponse {
 
+    private String type;
     private String accountantDate;
     private String accountNumber;
+    private String destinyCenter;
     private String totalDebit;
     private String totalCredit;
     private String difference;
@@ -33,6 +35,6 @@ public class AccountantOperationQHResumeResponse {
     }
 
     public String getResumeLine() {
-        return String.join("/", accountantDate, accountNumber, totalDebit, totalCredit, difference, String.valueOf(zda), status);
+        return String.join("/", type, accountantDate, accountNumber,destinyCenter, totalDebit, totalCredit, difference, String.valueOf(zda), status);
     }
 }

@@ -5,16 +5,21 @@ import com.ij.polizario.persistence.entities.PolizarioFileEntity;
 import com.ij.polizario.persistence.repositories.PolizarioFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ij.polizario.Util.Util.transformDate;
 import static java.lang.System.in;
 
 @Slf4j
@@ -34,7 +39,8 @@ public class PolizarioService {
     }
 
     public String generatePolizario() throws IOException {
-        List<PolizarioResumeResponse> data = generateData().stream().map(this::buildPolizarioResponse).toList();
+        var polizarioData = generateData();
+        var data = polizarioData.stream().map(this::buildPolizarioResponse).toList();
         return exportFile(data);
     }
 
@@ -65,14 +71,10 @@ public class PolizarioService {
 
         List<PolizarioFileEntity> polizarioFileEntityList = new ArrayList<>();
 
-        File dir = new File(polizarioFilesinputPath);
-//        File dir = new File("C:/Develop/Projects/Polizario/polizarioFileLoader/src/main/resources/data/");
-        FileFilter fileFilter = new WildcardFileFilter("POLIZARI*.*");
-        File[] files = dir.listFiles(fileFilter);
+        var dir = new File(polizarioFilesinputPath);
+        File[] files = dir.listFiles();
         assert files != null;
         for (File file : files) {
-            System.out.println(file);
-
 
             try {
                 FileInputStream fstream = new FileInputStream(file);
@@ -83,20 +85,20 @@ public class PolizarioService {
                 while ((strLine = br.readLine()) != null) {
                     if (strLine.contains("FECHA CONTABLE :")) {
 
-                        String fecha = strLine.substring(17, 27);// 2021-07-19
-                        System.out.println(fecha);
+                        String dateValue = transformDate(strLine.substring(17, 27));// yyyy-mm-dd to dd-mm-yyyy
+
                         //save date
-                        DODN:
+                        FILE_LINE:
                         while ((strLine = br.readLine()) != null) {
                             if (strLine.contains("SEQ. CUENTA ")) {
                                 while ((strLine = br.readLine()) != null) {
 
                                     if (strLine.contains("TOTAL")) {
-                                        break DODN;
+                                        break FILE_LINE;
                                     }
                                     if (!strLine.contains("-----")) {
-                                        System.out.println(strLine);
-                                        polizarioFileEntityList.add(new PolizarioFileEntity(fecha, strLine));
+                                        log.debug("Read line: {}", strLine);
+                                        polizarioFileEntityList.add(new PolizarioFileEntity(dateValue, strLine));
                                     }
                                 }
 
@@ -107,7 +109,7 @@ public class PolizarioService {
                 //Close the input stream
                 in.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("'Error reading file lines",e);
             }
         }
 

@@ -1,5 +1,6 @@
 package com.ij.polizario.config;
 
+import com.ij.polizario.config.mapper.QHFieldSetMapper;
 import com.ij.polizario.persistence.entities.QhInfoEntity;
 import com.ij.polizario.persistence.repositories.QhInfoRepository;
 import org.springframework.batch.core.Job;
@@ -91,7 +92,7 @@ public class QHLoadBatchConfig {
         fieldSetMapper.setTargetType(QhInfoEntity.class);
         lineMapper.setLineTokenizer(lineTokenizer);
         lineMapper.setFieldSetMapper(fieldSetMapper);
-        return lineMapper;
+        return new QHFieldSetMapper(lineMapper);
     }
 
     @Bean

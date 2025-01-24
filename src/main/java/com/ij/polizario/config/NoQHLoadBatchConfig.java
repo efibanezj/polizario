@@ -70,7 +70,6 @@ public class NoQHLoadBatchConfig {
         return itemReader;
     }
 
-
     @Bean
     public RepositoryItemWriter<NoQhInfoEntity> noQhItemWriter() {
         RepositoryItemWriter<NoQhInfoEntity> writer = new RepositoryItemWriter<>();

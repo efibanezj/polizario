@@ -46,12 +46,12 @@ public class QhInfoEntity {
     private String column_AA;
     private String column_AB;
     private String column_AC;
-    private String column_AD;
+    private String destinyCenter;//es lo mismo qeu codigo de oficina
     private String column_AE;
     private String column_AF;
     private String column_AG;
     private String column_AH;
-    private String accountNumber;
+    private String accountNumber;//sometimes this os only 1 field and in other cases 3 !!!
     private String column_AJ;
     private String column_AK;
     private String column_AL;

@@ -24,6 +24,7 @@ public class NoQhInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String accountantDate;
+    private String destinyCenter;
     private String impDebMl;
     private String impCredMl;
     private String cuenta1;

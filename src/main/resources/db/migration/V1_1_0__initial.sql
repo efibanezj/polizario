@@ -30,7 +30,7 @@ CREATE TABLE qh_info
     column_AA       VARCHAR(100),
     column_AB       VARCHAR(100),
     column_AC       VARCHAR(100),
-    column_AD       VARCHAR(100),
+    destiny_center       VARCHAR(100),
     column_AE       VARCHAR(100),
     column_AF       VARCHAR(100),
     column_AG       VARCHAR(100),
@@ -57,6 +57,7 @@ CREATE TABLE no_qh_info
 (
     id              INT(100) NOT NULL AUTO_INCREMENT,
     accountant_date        VARCHAR(100),
+    destiny_center        VARCHAR(100),
     imp_deb_ml        VARCHAR(100),
     imp_cred_ml        VARCHAR(100),
     cuenta1        VARCHAR(100),

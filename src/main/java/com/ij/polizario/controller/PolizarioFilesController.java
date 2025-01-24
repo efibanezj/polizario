@@ -20,7 +20,7 @@ public class PolizarioFilesController {
     @GetMapping("/resume")
     @ResponseStatus(code = HttpStatus.OK)
     public String generateAccountantInterfaceResume() throws IOException {
-        String fileName = polizarioService.generatePolizario();
+        var fileName = polizarioService.generatePolizario();
         return "Archivo generado: " + fileName;
     }
 }

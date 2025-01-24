@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.ij.polizario.Util.Util.transformDate;
 import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
@@ -68,12 +69,21 @@ public class QhAccountantInterfaceService {
 
             List<AccountantOperationQHResumeResponse> responseList = new ArrayList<>();
             for (Map.Entry<String, List<QhInfoEntity>> entry : mapQhInfoByAccountantDate.entrySet()) {
-                List<AccountantOperationQHResumeResponse> a = entry.getValue().stream()
+                List<List<QhInfoEntity>> agrupadosPorCuenta = entry.getValue().stream()
                         .collect(groupingBy(QhInfoEntity::getAccountNumber))
                         .values()
-                        .stream()
-                        .map(this::calculateQhInfoResume).toList();
-                responseList.addAll(a);
+                        .stream().toList();
+
+                for (List<QhInfoEntity> listaAgrupadosPorCuenta : agrupadosPorCuenta) {
+
+                    Map<String, List<QhInfoEntity>> mapCentroDestino = listaAgrupadosPorCuenta.stream()
+                            .collect(groupingBy(QhInfoEntity::getDestinyCenter));
+
+                    for (Map.Entry<String, List<QhInfoEntity>> entryCentroDestino : mapCentroDestino.entrySet()) {
+                        List<QhInfoEntity> qhInfoByCentroDestino = entryCentroDestino.getValue();
+                        responseList.add(calculateQhInfoResume(qhInfoByCentroDestino));
+                    }
+                }
             }
 
 
@@ -91,7 +101,7 @@ public class QhAccountantInterfaceService {
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);
 
-        fileWriter.write(String.join("/", "Fecha contable", "Número de cuenta", "Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
+        fileWriter.write(String.join("/", "Tipo","Fecha contable", "Número de cuenta", "Centro destino","Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
         fileWriter.write("\r\n");
 
         for (AccountantOperationQHResumeResponse op : responseList) {
@@ -117,12 +127,15 @@ public class QhAccountantInterfaceService {
 
         Double diferrence = debit - credit;
 
-        String accountantDate = qhInfoByAccountantNumber.stream().findAny().get().getAccountantDate();
-        String accountNumber = qhInfoByAccountantNumber.stream().findAny().get().getAccountNumber();
-
+        String accountantDate = transformDate(qhInfoByAccountantNumber.stream().findAny().get().getAccountantDate());
+        var info = qhInfoByAccountantNumber.stream().findAny().get();
+        String accountNumber = info.getAccountNumber();
+        String destinyCenter = info.getDestinyCenter();
         AccountantOperationQHResumeResponse response = AccountantOperationQHResumeResponse.builder()
+                .type("QH")
                 .accountantDate(accountantDate)
                 .accountNumber(accountNumber)
+                .destinyCenter(destinyCenter)
                 .totalDebit(Util.doubleToString(debit))
                 .totalCredit(Util.doubleToString(credit))
                 .difference(Util.doubleToString(diferrence))

@@ -20,4 +20,20 @@ public class Util {
         formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(bd.doubleValue());
     }
+
+    public static String transformDate(String date) {
+        String day, month, year;
+
+        if (date.contains("-")) {
+            String[] dateParts = date.split("-");
+            year = dateParts[0];
+            month = dateParts[1];
+            day = dateParts[2];
+        } else {
+            day = date.substring(6,8);
+            month = date.substring(4, 6);
+            year = date.substring(0, 4);
+        }
+        return day + "-" + month + "-" + year;
+    }
 }

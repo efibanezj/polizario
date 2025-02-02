@@ -62,6 +62,7 @@ CREATE TABLE no_qh_info
     imp_cred_ml        VARCHAR(100),
     cuenta1        VARCHAR(100),
     operation_sign        VARCHAR(100),
+    full_line        VARCHAR(10000),
 
     PRIMARY KEY (id)
 );

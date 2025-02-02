@@ -21,9 +21,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.ij.polizario.Util.Util.transformDate;
 import static java.util.stream.Collectors.groupingBy;
@@ -46,6 +50,8 @@ public class QhAccountantInterfaceService {
     private final QhInfoRepository qhInfoRepository;
     private final JobLauncher jobLauncher;
     private final Job qhLoaderJob;
+    @Value("${qh.files.input.path}")
+    private String qhFilesPath;
 
     public QhAccountantInterfaceService(JobLauncher jobLauncher, @Qualifier("qhLoaderJob") Job qhLoaderJob, QhInfoRepository qhInfoRepository) {
         this.jobLauncher = jobLauncher;
@@ -54,14 +60,19 @@ public class QhAccountantInterfaceService {
     }
 
     public String generateResumeFile() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
-            return generateQhResume();
+        return generateQhResume();
     }
 
     private String generateQhResume() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, IOException {
         BatchStatus batchStatus = launchResumeFileLoadProccess();
         if (batchStatus == BatchStatus.COMPLETED) {
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
+            String fileName = "QH - " + formatter.format(LocalDateTime.now()) + ".txt";
+
             List<QhInfoEntity> qhInfoList = qhInfoRepository.findAll();
+            exportInitialFile(outputPath + "CONSOLIDADO - " + fileName);
+
             qhInfoList.removeIf(el -> el.getAccountNumber().startsWith("8") || el.getAccountNumber().startsWith("6"));
 
             Map<String, List<QhInfoEntity>> mapQhInfoByAccountantDate = qhInfoList.stream()
@@ -87,21 +98,49 @@ public class QhAccountantInterfaceService {
             }
 
 
-            return exportFile(responseList);
+            return exportFile(outputPath + "PROCESADO - " + fileName, responseList);
         } else {
             throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
         }
     }
 
-    private String exportFile(List<AccountantOperationQHResumeResponse> responseList) throws IOException {
+    private void exportInitialFile(String fileName) throws IOException {
+        String inputDir = "./files/input/interfaz_QH";
+        try {
+            mergeFiles(inputDir, fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
-        String fileName = outputPath + "QH - "+formatter.format(LocalDateTime.now()) + ".txt";
+
+    public static void mergeFiles(String inputDir, String outputFile) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
+            Files.list(Paths.get(inputDir))
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        try (Stream<String> lines = Files.lines(file)) {
+                            lines.forEach(line -> {
+                                try {
+                                    writer.write(line);
+                                    writer.newLine();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
+    }
+
+    private String exportFile(String fileName, List<AccountantOperationQHResumeResponse> responseList) throws IOException {
 
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);
 
-        fileWriter.write(String.join("/", "Tipo","Fecha contable", "Número de cuenta", "Centro destino","Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
+        fileWriter.write(String.join("/", "Tipo", "Fecha contable", "Número de cuenta", "Centro destino", "Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
         fileWriter.write("\r\n");
 
         for (AccountantOperationQHResumeResponse op : responseList) {

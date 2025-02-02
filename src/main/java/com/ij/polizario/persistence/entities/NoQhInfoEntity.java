@@ -29,5 +29,6 @@ public class NoQhInfoEntity {
     private String impCredMl;
     private String cuenta1;
     private String operationSign; //This field is "correctora"
+    private String fullLine;
 
 }

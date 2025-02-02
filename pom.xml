@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ij</groupId>
     <artifactId>polizarioProject</artifactId>
-    <version>0.0.1</version>
+    <version>1.2.0</version>
     <name>polizarioFileLoader</name>
     <description>Polizario File Loader</description>
     <properties>

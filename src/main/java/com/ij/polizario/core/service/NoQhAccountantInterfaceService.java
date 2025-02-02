@@ -53,10 +53,15 @@ public class NoQhAccountantInterfaceService {
         BatchStatus batchStatus = launchResumeFileLoadProcess();
         if (batchStatus == BatchStatus.COMPLETED) {
 
-            List<NoQhInfoEntity> infoList = repo.findAll();
+            var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
+            var fileName = "No-QH - " + formatter.format(LocalDateTime.now()) + ".txt";
+
+            var infoList = repo.findAll();
+            exportInitialFile(outputPath + "CONSOLIDADO - "  + fileName, infoList);
+
             infoList.removeIf(el -> el.getCuenta1().startsWith("8") || el.getCuenta1().startsWith("6"));
 
-            Map<String, List<NoQhInfoEntity>> mapQhInfoByAccountantDate = infoList.stream()
+            var mapQhInfoByAccountantDate = infoList.stream()
                     .collect(groupingBy(NoQhInfoEntity::getAccountantDate));
 
             List<AccountantOperationNoQHResumeResponse> responseList = new ArrayList<>();
@@ -77,21 +82,34 @@ public class NoQhAccountantInterfaceService {
             }
 
 
-            return exportFile(responseList);
+            return exportFile(outputPath + "PROCESADO - " + fileName, responseList);
         } else {
             throw new BusinessException(BusinessExceptionEnum.SERVER_ERROR);
         }
     }
 
-    private String exportFile(List<AccountantOperationNoQHResumeResponse> responseList) throws IOException {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh_mm_ss");
-        String fileName = outputPath + "No-QH - "+formatter.format(LocalDateTime.now()) + ".txt";
+    private void exportInitialFile(String fileName, List<NoQhInfoEntity> infoList) throws IOException {
 
         File file = new File(fileName);
         FileWriter fileWriter = new FileWriter(file, true);
 
-        fileWriter.write(String.join("/", "Tipo","Fecha contable", "Número de cuenta","Centro destino", "Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
+        fileWriter.write(String.join("/", "entidad", "clave_int", "fecha_cont", "fecha_op", "prod", "subp", "gtia", "tip_pl", "plazo", "subsec", "sector", "cnae", "em_tu", "ambi", "moros", "inver", "op_cont", "cod_cont", "div", "tip_div", "filler", "varios", "clave_aut", "cent_ope", "cent_orig", "cent_des", "n_m_deb", "n_m_cre", "imp_deb_ml", "imp_cred_me", "imp_deb_me", "imp_cred_me", "ind_c", "num_contr", "clave_conc", "desc_conc", "tip_conc", "observ", "contrato", "apl_ori", "apl_dest", "tip_cont", "observ3", "reservat", "hactrgen", "haycocai", "hayctord", "hay_var", "ristra", "cuenta_1", "cuenta_2"));
+        fileWriter.write("\r\n");
+
+        for (var info : infoList) {
+            fileWriter.write(info.getFullLine());
+            fileWriter.write("\r\n");
+        }
+
+        fileWriter.close();
+    }
+
+    private String exportFile(String fileName, List<AccountantOperationNoQHResumeResponse> responseList) throws IOException {
+
+        File file = new File(fileName);
+        FileWriter fileWriter = new FileWriter(file, true);
+
+        fileWriter.write(String.join("/", "Tipo", "Fecha contable", "Número de cuenta", "Centro destino", "Débito", "Crédito", "Diferencia", "Es cuenta diferencia 0", "Estado"));
         fileWriter.write("\r\n");
 
         for (AccountantOperationNoQHResumeResponse op : responseList) {
